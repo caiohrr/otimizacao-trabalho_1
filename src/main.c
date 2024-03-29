@@ -28,7 +28,8 @@ void lerEntrada(int m, int k, int q, struct Rota *rotas, struct Pacote *pacotes)
 }
 
 
-int main(int argc, char **argv) {
+//int main(int argc, char **argv) {
+int main() {
 
         int n_cidades, m_rotas, k_recursos, q_pacotes, p_ganho;
         scanf("%d %d %d %d %d", &n_cidades, &m_rotas, &k_recursos, &q_pacotes, &p_ganho);
@@ -47,12 +48,12 @@ int main(int argc, char **argv) {
         lerEntrada(m_rotas, k_recursos, q_pacotes, rotas, pacotes);
 
 
-        FILE *arquivo_saida = fopen("saida.lp", "w+");
-        FILE *stream_saida = arquivo_saida;
+        //FILE *arquivo_saida = fopen("saida.lp", "w+");
+        FILE *stream_saida = stdout;
 
-        if (argc > 1 && strcmp(argv[1], "-d") == 0) {
-                stream_saida = stdout;
-        }
+        //if (argc > 1 && strcmp(argv[1], "-d") == 0) {
+        //        stream_saida = stdout;
+        //}
 
         fprintf(stream_saida, "max:");
         fprintf(stream_saida, " %df0%d0%d", p_ganho, rotas[0].inicio, rotas[0].fim);
@@ -65,7 +66,7 @@ int main(int argc, char **argv) {
         }
 
         for (int i = 0; i < q_pacotes; i++) {
-                fprintf(stream_saida, " - %dq0%d", pacotes[i].custo, i + 1);
+                fprintf(stream_saida, " - %dq%d", pacotes[i].custo, i + 1);
         }
         fprintf(stream_saida, ";\n");
 
@@ -144,10 +145,10 @@ int main(int argc, char **argv) {
         fprintf(stream_saida, "\n");
 
         for(int i = 0; i < q_pacotes; i++) {
-                fprintf(stream_saida, "q%d >= 0;\n", i);
+                fprintf(stream_saida, "q%d >= 0;\n", i+1);
         }
 
-        fclose(arquivo_saida);
+        //fclose(arquivo_saida);
 
         for (int i = 0; i < m_rotas; i++) {
                 free(rotas[i].recursos); 
