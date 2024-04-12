@@ -33,6 +33,10 @@ int main() {
 
         int n_cidades, m_rotas, k_recursos, q_pacotes, p_ganho;
         scanf("%d %d %d %d %d", &n_cidades, &m_rotas, &k_recursos, &q_pacotes, &p_ganho);
+        if (n_cidades == 0 || m_rotas == 0 || k_recursos == 0 || q_pacotes == 0) {
+                fprintf(stderr, "Erro: entrada invalida\n");
+                return EXIT_FAILURE;
+        }
 
         struct Rota rotas[m_rotas];
         struct Pacote pacotes[q_pacotes];
@@ -48,12 +52,7 @@ int main() {
         lerEntrada(m_rotas, k_recursos, q_pacotes, rotas, pacotes);
 
 
-        //FILE *arquivo_saida = fopen("saida.lp", "w+");
         FILE *stream_saida = stdout;
-
-        //if (argc > 1 && strcmp(argv[1], "-d") == 0) {
-        //        stream_saida = stdout;
-        //}
 
         fprintf(stream_saida, "max:");
         fprintf(stream_saida, " %df0%d0%d", p_ganho, rotas[0].inicio, rotas[0].fim);
@@ -68,7 +67,7 @@ int main() {
         for (int i = 0; i < q_pacotes; i++) {
                 fprintf(stream_saida, " - %dq%d", pacotes[i].custo, i + 1);
         }
-        fprintf(stream_saida, ";\n");
+        fprintf(stream_saida, " + 0;\n");
 
         for (int i = 0; i < k_recursos; i++) {
                 fprintf(stream_saida, "%dy0%d0%d", rotas[0].recursos[i], rotas[0].inicio, rotas[0].fim);
@@ -83,7 +82,7 @@ int main() {
                         fprintf(stream_saida, " + %dq%d", pacotes[k].recursos[i], k + 1);
 
                 }
-                fprintf(stream_saida, ";\n");
+                fprintf(stream_saida, " + 0;\n");
         }
         fprintf(stream_saida, "\n");
 
@@ -118,11 +117,11 @@ int main() {
                         }
                 }
 
-                fprintf(stream_saida, " = ");
+                fprintf(stream_saida, " + 0 = + 0");
                 for (int j = 0; j < m_rotas; j++) {
                         if (rotas[j].inicio == i + 1) {
                                 if (flag_soma_inicio == 0) {
-                                        fprintf(stream_saida, "f0%d0%d", rotas[j].inicio, rotas[j].fim);
+                                        fprintf(stream_saida, " + f0%d0%d", rotas[j].inicio, rotas[j].fim);
                                         flag_soma_inicio = 1;
                                 } else {
                                         fprintf(stream_saida, " + f0%d0%d", rotas[j].inicio, rotas[j].fim);
